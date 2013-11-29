@@ -33,6 +33,7 @@ struct player{
 	int ypos;
 	int money;
 	int health;
+	enum moveDirections{right = 1, up = 2, left = 3, right = 4};
 };
 
 
@@ -94,19 +95,22 @@ void genMap(int size){
 	}
 }
 
-int spawnPlayer(int size){ //returns -1 if can't spawn, 0 if spawned homeless(on a street), or 1 if spawned in a house
-	while(1 == 1){
-		int ranX =  rand()%(size - 0 + 1) + 1;// high - low + 1
-		int ranY =  rand()%(size - 0 + 1) + 1;//ditto
+int spawnPlayer(int size){ //returns -1 if can't spawn, 0 if spawned homeless(on a street), or 1 if spawned in a house.. To be called succesive times until return > -1
+	int ranX =  rand()%(size - 0 + 1) + 1;// high - low + 1
+	int ranY =  rand()%(size - 0 + 1) + 1;//ditto
 
-		if(map[ranX][ranY] == 'H'){
-			map[ranX][ranY] = 'o';
-		}
-		else if((map[ranX][ranY] == '+') || (map[ranX][ranY] == '|') || (map[ranX][ranY] == '-')){
-			map[ranX][ranY] = 'o';
-		}
-
+	if(map[ranX][ranY] == 'H'){
+		map[ranX][ranY] = 'o';
+		return 1;
 	}
+	else if((map[ranX][ranY] == '+') || (map[ranX][ranY] == '|') || (map[ranX][ranY] == '-')){
+		map[ranX][ranY] = 'o';
+		return 0;
+	}
+	else{
+		return -1;
+	}
+
 }
 
 
