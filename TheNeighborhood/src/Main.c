@@ -26,6 +26,18 @@
 enum buildings{house = 1, buisness = 2, store = 3, tree = 4};
 enum sizes{small = 3,medium = 4,large = 8,DAMN = 16};
 enum moveDirections{down = 1, up = 2, left = 3, right = 4};
+char map[10][10] = {{'|','H','X','X','X','H','X','|','X','X'},
+					{'|','H','H','|','H','H','X','|','H','X'},
+					{'|','H','H','|','H','H','X','|','B','X'},
+					{'|','H','H','|','X','H','X','|','H','B'},
+					{'|','-','-','-','-','-','-','+','-','-'},
+					{'|','X','H','|','H','X','X','|','B','S'},
+					{'|','B','H','-','+','H','H','|','B','S'},
+					{'|','B','X','H','|','X','H','|','-','-'},
+					{'|','S','X','H','-','|','H','|','H','H'},
+					{'|','B','X','X','H','B','H','|','H','X'},
+};
+
 
 typedef struct{
 	int xpos;
@@ -38,104 +50,162 @@ typedef struct{
 typedef struct {
 	int size;
 	int streetspacing;// street spacing from origin
-	char** map;
 	char playerTile;
-	char carTile;
+//	char carTile;
 }World;
 
 Player player = {0,0,100,100,0};
-World myWorld = {0,3};
+World myWorld = {10,3,'|'};
 
 
-void genWorld(int size,World* myWorld){
+//void genWorld(int size,World* myWorld){
+//
+//	//allocate (size) spaces for 2d array (map), of chars (Day 1)
+//	printf("Mallocing");
+//	map = malloc(sizeof(char*) * size);
+//	int i;
+//	for(i = 0; i < size; i++)
+//		map[i]= (char*) malloc(size * sizeof(char));
+//
+//	//Gen Roads
+//	for(i = 0;i < size-1; i++){
+//		int j;
+//		for(j = 0; j < size-1; j++){
+//			if(((i + 1) % myWorld->streetspacing == 0) && ((j + 1) % myWorld->streetspacing == 0)){
+//				map[i][j] = '+';//intersections
+//			}
+//			else if(((j + 1) % myWorld->streetspacing == 0)){
+//				map[i][j] = '-';// y = n roads
+//			}
+//			else if((i + 1) % myWorld->streetspacing == 0){
+//				map[i][j] = '|';// x = n roads
+//			}else//Trees as place holders between roads
+//				map[i][j] = 'x';
+//		}
+//	myWorld->size = size;
+//	}
+//
+//	//Gen Buildings
+//	srand(time(NULL)); //seed the earth
+//	for(i = 0; i < size- 1; i++){
+//		int j;
+//		for(j = 0; j < size -1; j++){
+//			if(map[i][j] == 'x'){
+//				int randy =  rand()%(4) + 1;
+//				switch(randy){
+//				case house:
+//					map[i][j] = 'H';
+//					break;
+//				case buisness:
+//					map[i][j] = 'B';
+//					break;
+//				case store:
+//					map[i][j] = 'S';
+//					break;
+//				case tree:
+//					map[i][j] = 'X';
+//					break;
+//				default:
+//					puts("Dun goofed, placing a tree");
+//					map[i][j] = 'X';
+//					break;
+//				}
+//			}
+//		}
+//	}
+//}
 
-	//allocate (size) spaces for 2d array (map), of chars (Day 1)
-	printf("Mallocing");
-	myWorld->map = malloc(sizeof(char*) * size);
-	int i;
-	for(i = 0; i < size; i++)
-		myWorld->map[i]= (char*) malloc(size * sizeof(char));
-
-	//Gen Roads
-	for(i = 0;i < size-1; i++){
-		int j;
-		for(j = 0; j < size-1; j++){
-			if(((i + 1) % myWorld->streetspacing == 0) && ((j + 1) % myWorld->streetspacing == 0)){
-				myWorld->map[i][j] = '+';//intersections
-			}
-			else if(((j + 1) % myWorld->streetspacing == 0)){
-				myWorld->map[i][j] = '-';// y = n roads
-			}
-			else if((i + 1) % myWorld->streetspacing == 0){
-				myWorld->map[i][j] = '|';// x = n roads
-			}else//Trees as place holders between roads
-				myWorld->map[i][j] = 'x';
-		}
-	myWorld->size = size;
-	}
-
-	//Gen Buildings
-	srand(time(NULL)); //seed the earth
-	for(i = 0; i < size- 1; i++){
-		int j;
-		for(j = 0; j < size -1; j++){
-			if(myWorld->map[i][j] == 'x'){
-				int randy =  rand()%(4) + 1;
-				switch(randy){
-				case house:
-					myWorld->map[i][j] = 'H';
-					break;
-				case buisness:
-					myWorld->map[i][j] = 'B';
-					break;
-				case store:
-					myWorld->map[i][j] = 'S';
-					break;
-				case tree:
-					myWorld->map[i][j] = 'X';
-					break;
-				default:
-					puts("Dun goofed, placing a tree");
-					myWorld->map[i][j] = 'X';
-					break;
-				}
-			}
-		}
-	}
+//void genWorld(){
+//	myWorld.map = {
+//			{'X','X','|','X','X'}
+//			{'B','B','|','X','X'}
+//			{'-','-','+','-','-'}
+//			{'S','H','|','H','H'}
+//			{'X','H','|','X','X'}
+////
+//	};
+//}
+int wait(){
+	printf("[Enter] to continue...");
+	getchar();
+	return 0;
 }
+
 int clearScreen(){
-	int i =printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	int i =printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	if(i > 0){
 		return 1;
 	}else
 		return -1;
 }
+void rollEffect(char str[],int length, int iters){ // works on occasion
+	int i;
+	int j;
+	printf("\n");
+	for(j = 1; j <= iters; j ++){
+		for(i = 0; i < length; i++){
+			printf(" %c", str[i]);
+			sleep(.25);
+		}
+	}
+	printf("\n");
+}
+void printHelp(){
+	printf("\nHELP_________\n");
+	printf("Movement: W A S D\n");
+	printf("OBJECTIVE: roam the neighbor hood, there are many \'features\' \n'");
+	wait();
+
+}
 void splash(){
-	printf("This will be the splash animation\n");
-	sleep(0);
+	rollEffect("Welcome to the Neighborhood",27,1);
+	printf("\t     Written by Lucien Brulé\n");
+	rollEffect("'`~,-`^",7,4);
+	printf("Type [h] for HELP and COMMANDS,or [Enter] to continue");
+	if(getchar() == 'h'){
+		printHelp();
+	}
+	clearScreen();
 }
 int putPlayer(int newX, int newY){
-	myWorld.playerTile = myWorld.map[newX][newY];
-	myWorld.map[newX][newY] = 'o';
+	myWorld.playerTile = map[newX][newY];
+	map[newX][newY] = 'o';
+	map[player.xpos][player.ypos] = myWorld.playerTile;
 	player.xpos = newX;
 	player.ypos = newY;
 	return 0;
 }
 
-int spawnPlayer(int size){ //returns -1 if can't spawn, 0 if spawned homeless(on a street), or 1 if spawned in a house.. To be called succesive times until return > -1
-	int ranX =  rand()%(size - 0 + 1) + 1;// high - low + 1
-	int ranY =  rand()%(size - 0 + 1) + 1;//ditto
+//int spawnPlayer(int size){ //returns -1 if can't spawn, 0 if spawned homeless(on a street), or 1 if spawned in a house.. To be called succesive times until return > -1
+//	int ranX =  rand()%(size - 0 + 1) + 1;// high - low + 1
+//	int ranY =  rand()%(size - 0 + 1) + 1;//ditto
+//
+//	if(map[ranX][ranY] == 'H'){
+//		putPlayer(ranX,ranY);
+//		return 1;
+//	}
+//	else if((map[ranX][ranY] == '+') || (map[ranX][ranY] == '|') || (map[ranX][ranY] == '-')){
+//		putPlayer(ranX,ranY);
+//		return 0;
+//	}
+//	else{
+//		return -1;
+//	}
+//	return -1;
+//}
 
-	if(myWorld.map[ranX][ranY] == 'H'){
-		putPlayer(ranX,ranY);
+int spawnPlayer(){
+	srand(time(NULL));
+	if((rand() % 10) < 5){
+		putPlayer(0,3);
 		return 1;
+
 	}
-	else if((myWorld.map[ranX][ranY] == '+') || (myWorld.map[ranX][ranY] == '|') || (myWorld.map[ranX][ranY] == '-')){
-		putPlayer(ranX,ranY);
-		return 0;
-	}
+
 	else{
-		return -1;
+
+		putPlayer(0,1);
+		return 0;
 	}
 	return -1;
 }
@@ -143,44 +213,46 @@ int spawnPlayer(int size){ //returns -1 if can't spawn, 0 if spawned homeless(on
 
 void drawFrame(){
 	clearScreen();
-	int length = myWorld.size - 1;
+	int length = myWorld.size;
 	int i;
+	printf("\t");
 	for(i = 0; i < length; i ++){
 		int j;
+
 		for(j = 0; j < length; j++){
-			printf("%c",myWorld.map[i][j]);
+			printf("%c ",map[i][j]);
 		}
-		printf("\n");
+		printf("\n\t");
 	}
-	printf("$: %d \t H: %d", player.money, player.money);
-
-
+	printf("\b\b\b\b\b\b$: %d     H: %d\n", player.money, player.money);
+	printf("//>");
 }
 int addMoney(int amt){
 	player.money += amt;
-	printf("%d moni get\n",amt);
-	return 0;
+	printf("< %d points added>\n",amt);
+	return amt;
 }
 int subtractMoney(int amt){
 	player.money -= amt;
-	printf("%d moni lost\n",amt);
+	printf("< %d points lost>\n",amt);
 	return 0;
 }
 int interactBuilding(int buildingType){
-	clearScreen();
+	sleep(1);
 	switch(buildingType){
 	case house:
 		printf("<ascii hosue>\n");
-		printf("You enter the house, there seems to be people here, but you snoop around stuff anyway");
+		printf("You enter the house, there seems to be people here, but you snoop around stuff anyway\n");
 		if((rand()% 100) <50){
-			printf("After going through their things, you find %d monies",(rand() % 100 + 2));
+			printf("After going through their things, you find %d monies\n",addMoney((rand() % 100 + 2)));
 		}
 		break;
 	case buisness:
-		printf("This is a business");
+		printf("This is a business\n");
 		break;
 	case store:
-		printf("This is a store");
+		printf("This is a store\n");
+
 		break;
 	case tree:
 		printf("<ascii tree>\n");
@@ -189,9 +261,10 @@ int interactBuilding(int buildingType){
 			printf("Since you are a ninja, the squirrels look up to you and present you with\n 10 coins");
 			addMoney(4);
 			printf("You think to yourself:Too bad squirrels can't count.");
+
 		}
 		else{
-			printf("They scurry about, but there is no treasure to be found here");
+			printf("They scurry about, but there is no treasure to be found here\n");
 		}
 		player.isNinja++;
 		break;
@@ -199,75 +272,83 @@ int interactBuilding(int buildingType){
 		return -1;
 		break;
 	}
+	printf("\n_");
+	sleep(4);
+	wait();
+	clearScreen();
 	return 0;
 }
-int movePlayer(int newX, int newY){// returns -1 if couldnt move to pos, 0 if moved.
+void movePlayer(int newX, int newY){// returns -1 if couldnt move to pos, 0 if moved.
 
-	switch (myWorld.map[newX][newY]){
+	switch (map[newX][newY]){
 	case 'H':
-		return interactBuilding(house);
+		 interactBuilding(house);
 		break;
 	case 'B':
-		return interactBuilding(buisness);
+		 interactBuilding(buisness);
 		break;
 	case 'S':
-		return interactBuilding(store);
+		 interactBuilding(store);
 		break;
 	case 'X':
-		return interactBuilding(tree);
+		 interactBuilding(tree);
 		break;
 	case '|':
 	case '-':
 	case '+':
-		return putPlayer(newX,newY);
-		break;
-	default:
-		return -1;
+		 putPlayer(newX,newY);
 		break;
 	}
-	return 0;
 }
 int initialize(){
-	printf("How big is the hood?");
-		int input = -1;
-		char uin;
-		while(input < 0){
-			printf("[1 Small][2 Medium][3 Large][4 DAMN!]");
-			scanf("%i",&input);
-		}
-		printf(" You chose %u\n", input);
-		genWorld(input, &myWorld);
-		drawFrame();
-		int i = 0;// iterator
+//	printf("How big is the hood?");
+//		int input = -1;
+//		char uin;
+//		while(input < 0){
+//			printf("[1 Small][2 Medium][3 Large][4 DAMN!]");
+//			scanf("%i",&input);
+////		}
+//		printf(" You chose %u\n", input);
+//		genWorld(input, &myWorld);
+//		drawFrame();
+//		int i = 0;// iterator
 		int r = -2; // return check
-		while(r < 0){
-			r = spawnPlayer(input);// successive call to spawnPlayer
-			i++;// increment i
-			if(i > 5){ //needed incase genworld produces a bad world
-				genWorld(input,&myWorld);
-			}
-			//defaultWorld() would go here
-		}
-		printf("%i",r);
+//		while(r < 0){
+//			r = spawnPlayer(input);// successive call to spawnPlayer
+//			i++;// increment i
+//			if(i > 5){ //needed incase genworld produces a bad world
+//				genWorld(input,&myWorld);
+//			}
+//			//defaultWorld() would go here
+//		}
+		r = spawnPlayer();
+//		printf("%i",r);
+		printf("As the sun rises on the Neighborhood, you wake up and realise...\n\t");
 		if(r == 1){
-			printf("Congrats homie, you're neet");
+			printf("Life's awesome, you're neet(You spawned in a house ^-^)\n");
 			addMoney(100);
 		}
 		else if( r == 0){
-			printf("Its hard out here on these streets! Keep it g");
+			printf("Its hard out here on these streets!\n Today you gotta keep it g. (You spawned on the STREETS)\n");
 			player.isNinja += 4;
 			subtractMoney(50);
+		}else{
+			printf("DUN GOOFED on lifestyle\n");
 		}
 
-		printf("Prepare your body for the new world...");
+		printf("Prepare your body for the new world...\n");
+		int i = 0;
+		for(i = 0; i < 5; i++){
+			printf(".");
+		}
+		wait();
 		return 0;
-}
-void printHelp(){
-	printf("This is the help page");
 }
 
 void debugMenu(){
-
+	printf("This is the debug page");
+	printf("\nThe Neighborhood  Copyright (C) 2013  Lucien Brule\nThis program comes with ABSOLUTELY NO WARRANTY;\n This is free software, and you are welcome to redistribute it\n under certain conditions; type `show c' for details.");
+	sleep(1);
 }
 
 int main(){
@@ -282,14 +363,16 @@ int main(){
 		//Draw the map and HUD
 		drawFrame();
 		//Saftey loop to ensure good value
-		while((input !='q')||(input !='h')||(input !='w')||(input !='a')||(input !='s')||(input !='d')||(input !='~')){
-			scanf("%c",&input);
-		}
+
+//		while((input !='q')||(input !='h')||(input !='w')||(input !='a')||(input !='s')||(input !='d')||(input !='~')){
+			input = getchar();
+			printf("You chose %c\n",input);
+//		}
 
 		switch(input){
 		case 'q':
 			printf("Are you sure you want to quit? y/n");
-			scanf("%c",&input);
+			input = getchar();
 			if(input == 'y'){
 				printf("Peace homie");
 			}
@@ -297,17 +380,17 @@ int main(){
 		case 'h':
 			printHelp();
 			break;
+		case 'd':
+			movePlayer(player.xpos ,player.ypos +1);
+			break;
 		case 'w':
-			movePlayer(player.xpos, player.ypos + 1);
+			movePlayer((player.xpos -1), player.ypos);
 			break;
 		case 'a':
-			movePlayer(player.xpos -1, player.ypos);
+			movePlayer(player.xpos ,(player.ypos -1));
 			break;
 		case 's':
-			movePlayer(player.xpos , player.ypos -1);
-			break;
-		case 'd':
-			movePlayer(player.xpos +1, player.ypos);
+			movePlayer((player.xpos +1), player.ypos);
 			break;
 		case '~':
 
@@ -316,9 +399,6 @@ int main(){
 			printf("DUN GOOFED!");
 		}
 		turns++;
-		printf("turn %i complete", turns);
-		printf("updated map:");
-		drawFrame();
 	}
 	return 0;
 }
