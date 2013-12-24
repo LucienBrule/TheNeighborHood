@@ -23,6 +23,8 @@
 #include <math.h>
 #include <unistd.h>
 
+int quit = 0;
+int turns = 1;
 enum buildings{house = 1, buisness = 2, store = 3, tree = 4};
 enum sizes{small = 3,medium = 4,large = 8,DAMN = 16};
 enum moveDirections{down = 1, up = 2, left = 3, right = 4};
@@ -45,6 +47,7 @@ typedef struct{
 	int money;
 	int health;
 	int isNinja;
+	char name[10];
 }Player;
 
 typedef struct {
@@ -54,10 +57,9 @@ typedef struct {
 //	char carTile;
 }World;
 
-Player player = {0,0,100,100,0};
+Player player = {0,0,100,100,0,0};
 World myWorld = {10,3,'|'};
-
-
+//
 //void genWorld(int size,World* myWorld){
 //
 //	//allocate (size) spaces for 2d array (map), of chars (Day 1)
@@ -214,17 +216,31 @@ int spawnPlayer(){
 void drawFrame(){
 	clearScreen();
 	int length = myWorld.size;
-	int i;
+	int bar;
+	printf("\t\t The Neighbor Hood\n");
 	printf("\t");
+	for(bar = length*3; bar > 0; bar --){
+		printf("#");
+	}
+	printf("\n\t");
+	int i;
 	for(i = 0; i < length; i ++){
 		int j;
-
+		printf("#");
 		for(j = 0; j < length; j++){
 			printf("%c ",map[i][j]);
+			if(j == length -1){
+				printf("#");
+			}
+			if(i == 0 && j == length -1)
+				printf("turn %i", turns);
 		}
 		printf("\n\t");
 	}
-	printf("\b\b\b\b\b\b$: %d     H: %d\n", player.money, player.money);
+	for(bar = length*3; bar > 0; bar --){
+			printf("#");
+		}
+	printf("\n\t%s $: %d     H: %d\n",player.name, player.money, player.health);
 	printf("//>");
 }
 int addMoney(int amt){
@@ -238,10 +254,9 @@ int subtractMoney(int amt){
 	return 0;
 }
 int interactBuilding(int buildingType){
-	sleep(1);
 	switch(buildingType){
 	case house:
-		printf("<ascii hosue>\n");
+		printf("<ascii house>\n");
 		printf("You enter the house, there seems to be people here, but you snoop around stuff anyway\n");
 		if((rand()% 100) <50){
 			printf("After going through their things, you find %d monies\n",addMoney((rand() % 100 + 2)));
@@ -272,8 +287,7 @@ int interactBuilding(int buildingType){
 		return -1;
 		break;
 	}
-	printf("\n_");
-	sleep(4);
+	printf("\n");
 	wait();
 	clearScreen();
 	return 0;
@@ -323,7 +337,9 @@ int initialize(){
 //		}
 		r = spawnPlayer();
 //		printf("%i",r);
-		printf("As the sun rises on the Neighborhood, you wake up and realise...\n\t");
+		printf("What is your name?");
+		scanf("%s",player.name);
+		printf("As the sun rises on the Neighborhood, you wake up and realize...\n\t");
 		if(r == 1){
 			printf("Life's awesome, you're neet(You spawned in a house ^-^)\n");
 			addMoney(100);
@@ -342,6 +358,7 @@ int initialize(){
 			printf(".");
 		}
 		wait();
+		drawFrame();
 		return 0;
 }
 
@@ -354,27 +371,30 @@ void debugMenu(){
 int main(){
 	splash();
 	initialize();
-	sleep(1);
-	char input = 'm';
-	int turns;
+	char input = 'm'; // an unused key
+//	sleep(1);
 	//Engine
 
-	while(input != 'q'){
+	while(quit != 1){
 		//Draw the map and HUD
-		drawFrame();
 		//Saftey loop to ensure good value
 
 //		while((input !='q')||(input !='h')||(input !='w')||(input !='a')||(input !='s')||(input !='d')||(input !='~')){
-			input = getchar();
-			printf("You chose %c\n",input);
-//		}
 
+			input = getchar();
+			getchar();
+//			printf("You chose %c\n",input);
+//		}
+			char sinput;
 		switch(input){
 		case 'q':
 			printf("Are you sure you want to quit? y/n");
-			input = getchar();
-			if(input == 'y'){
+			sinput = getchar();
+			getchar();
+			if(sinput == 'y'){
 				printf("Peace homie");
+				sleep(2);
+				quit = 1;
 			}
 			break;
 		case 'h':
@@ -396,9 +416,12 @@ int main(){
 
 			break;
 		default:
-			printf("DUN GOOFED!");
+			printf("%c is an Invaild key press", input);
+			turns--;
 		}
 		turns++;
+		drawFrame();
+		input = 'm';
 	}
 	return 0;
 }
