@@ -16,17 +16,26 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+// hypebasedtraplordpreveeny
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <math.h>
-#include <unistd.h>
+
+#ifdef __unix__
+# include <stdio.h>
+# include <stdlib.h>
+# include <time.h>
+# include <math.h>
+# include <unistd.h>
+
+#elif defined(_WIN32) || defined(WIN32)
+# include <windows.h>
+# include <stdio.h>
+#define sleep(x) Sleep(1000* x)
+#endif
 
 int quit = 0;
 int turns = 1;
 enum buildings{house = 1, buisness = 2, store = 3, tree = 4};
-enum sizes{small = 3,medium = 4,large = 8,DAMN = 16};
+// enum sizes{small = 3,medium = 4,large = 8,DAMN = 16};
 enum moveDirections{down = 1, up = 2, left = 3, right = 4};
 char map[10][10] = {{'|','H','X','X','X','H','X','|','X','X'},
 					{'|','H','H','|','H','H','X','|','H','X'},
@@ -56,7 +65,6 @@ typedef struct {
 	char playerTile;
 //	char carTile;
 }World;
-
 Player player = {0,0,100,100,0,0};
 World myWorld = {10,3,'|'};
 //
@@ -86,7 +94,6 @@ World myWorld = {10,3,'|'};
 //		}
 //	myWorld->size = size;
 //	}
-//
 //	//Gen Buildings
 //	srand(time(NULL)); //seed the earth
 //	for(i = 0; i < size- 1; i++){
@@ -116,7 +123,6 @@ World myWorld = {10,3,'|'};
 //		}
 //	}
 //}
-
 //void genWorld(){
 //	myWorld.map = {
 //			{'X','X','|','X','X'}
@@ -157,7 +163,6 @@ void printHelp(){
 	printf("Movement: W A S D\n");
 	printf("OBJECTIVE: roam the neighbor hood, there are many \'features\' \n'");
 	wait();
-
 }
 void splash(){
 	rollEffect("Welcome to the Neighborhood",27,1);
@@ -211,7 +216,6 @@ int spawnPlayer(){
 	}
 	return -1;
 }
-
 
 void drawFrame(){
 	clearScreen();
@@ -374,13 +378,11 @@ int main(){
 	char input = 'm'; // an unused key
 //	sleep(1);
 	//Engine
-
 	while(quit != 1){
 		//Draw the map and HUD
 		//Saftey loop to ensure good value
 
 //		while((input !='q')||(input !='h')||(input !='w')||(input !='a')||(input !='s')||(input !='d')||(input !='~')){
-
 			input = getchar();
 			getchar();
 //			printf("You chose %c\n",input);
