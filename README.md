@@ -32,7 +32,7 @@ Uses:
     To expirement with game design
 Known Bugs:
 
-    Sometimes the player tile with spawn in between a pair of house tiles, this is fixed by rebuilding and running
+    Sometimes the player tile will spawn in between a pair of house tiles, this is fixed by rebuilding and running
     The opening splash animations seem to only work on Windows
     A player can war from one street to the next if the streets are on the edge of the map
 
