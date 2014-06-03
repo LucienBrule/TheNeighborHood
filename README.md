@@ -2,7 +2,7 @@ The Neighborhood README:
 
 Name of project:
 
-    "The Neighborhood
+    "The Neighborhood"
     
 Description:
 
@@ -10,19 +10,25 @@ Description:
     
 Instructions:
 
-    Run TheNeighborHood.exe
-    OR
-    Build and run TheNeighborHood.c
-
+    On systems running either Gnu/Linux or Windows:
+    build the executable with gcc Main.c -o TheNeighborhood
+    Execute the executable you just made
+    
+    controls:
+        WASD to select a direction to move in
+        ENTER to enter the desired direction
+        WASD in the location of a building or tree to interact.
+        
 Deveopment Environment:
 
-    Windows 7 sp 1 compiled with Cygwin gcc with c99 compatibility.
+    Cygwin on Windows 7sp 1 with gcc
+    Windows 7 sp 1 compiled with Minigw
     
 Uses:
     
     For entertainment
     To practice programming in C
-    To expirament with game design
+    To expirement with game design
 
 Anyone is welcome to join in, I'll accept anything that improves the game, or does anything ineresting or otherwise beneficial.
 
