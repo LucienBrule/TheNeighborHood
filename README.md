@@ -40,7 +40,7 @@ Anyone is welcome to join in, I'll accept anything that improves the game, or do
 
 License(because why not, right?):
 
-    Copyright (C) 2013 Lucien Brulé and whoever else decides to contribute.
+    Copyright (C) 2014 Lucien Brulé and whoever else decides to contribute.
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
