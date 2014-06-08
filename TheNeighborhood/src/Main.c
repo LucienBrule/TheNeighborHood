@@ -20,6 +20,7 @@
 
 
 #ifdef __unix__
+#define unix
 # include <stdio.h>
 # include <stdlib.h>
 # include <time.h>
@@ -28,11 +29,13 @@
 #define clear(x) printf("\033[2J");
 
 #elif defined(_WIN32) || defined(WIN32)
+# define windows
 # include <windows.h>
 # include <stdio.h>
-#include <stdlib.h>
-#define clear(x) system("cls");
-#define sleep(x) Sleep(1000* x)
+# include <stdlib.h>
+# define clear(x) system("cls");
+# define sleep(x) Sleep(1000* x)
+  HANDLE  hConsole;
 #endif
 
 int quit = 0;
@@ -226,7 +229,43 @@ int spawnPlayer(){
 	return -1;
 }
 
+void printcolor(char c){
+#ifdef windows
+	  hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	 CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+	  WORD saved_attributes;
+	    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+	    saved_attributes = consoleInfo.wAttributes;
+		switch (c){
+		case 'H':
+			  SetConsoleTextAttribute(hConsole,8 | BACKGROUND_RED | BACKGROUND_RED);
+			break;
+		case 'B':
+			  SetConsoleTextAttribute(hConsole,0  | 8 |0);
+			break;
+		case 'S':
+			  SetConsoleTextAttribute(hConsole,3 | BACKGROUND_BLUE);
+			break;
+		case 'X':
+			  SetConsoleTextAttribute(hConsole,2 | BACKGROUND_GREEN | 8);
+			break;
+		case '|':
+		case '-':
+		case '+':
+			  SetConsoleTextAttribute(hConsole,6);
+
+			break;
+		}
+		printf("%c",c);
+	    SetConsoleTextAttribute(hConsole, saved_attributes);
+#else
+	  //TODO: color thing for nix
+	    printf("&c",c);
+#endif
+}
+
 void drawFrame(){
+
 	clearScreen();
 	int length = myWorld.size;
 	int bar;
@@ -239,22 +278,22 @@ void drawFrame(){
 	int i;
 	for(i = 0; i < length; i ++){
 		int j;
-		printf("#");
+		printf("#");					//Draws borders
 		for(j = 0; j < length; j++){
-			printf("%c ",map[i][j]);
-			if(j == length -1){
+			printcolor(map[i][j]);	//Draws element at i,j
+			if(j == length -1){			//Draws borders
 				printf("#");
 			}
 			if(i == 0 && j == length -1)
-				printf("turn %i", turns);
+				printf("turn %i", turns);//HUD turns
 		}
 		printf("\n\t");
 	}
 	for(bar = length*3; bar > 0; bar --){
-			printf("#");
+			printf("#");				//Borders
 		}
 	printf("\n\t%s $: %d     H: %d\n",player.name, player.money, player.health);
-	printf("//>");
+	printf("//>");						//HUD and prompt carrot
 }
 int addMoney(int amt){
 	player.money += amt;
@@ -380,6 +419,7 @@ void debugMenu(){
 }
 
 int main(){
+
 	splash();
 	initialize();
 	char input = 'm'; // an unused key
