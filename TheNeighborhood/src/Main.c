@@ -187,6 +187,7 @@ void splash(){
 	}
 	clearScreen();
 }
+
 int putPlayer(int newX, int newY){
 	myWorld.playerTile = map[newX][newY];
 	map[newX][newY] = 'o';
@@ -261,6 +262,25 @@ void printcolor(char c){
 #else
 	  //TODO: color thing for nix
 	    printf("&c",c);
+	    switch (c){ //TODO find linux escape code for color
+	    		case 'H':
+	    			printf("%c" + c + "");
+	    			break;
+	    		case 'B':
+	    			printf("%c" + c + "");
+	    			break;
+	    		case 'S':
+	    			printf("%c" + c + "");
+	    			break;
+	    		case 'X':
+	    			printf("%c" + c + "");
+	    			break;
+	    		case '|':
+	    		case '-':
+	    		case '+':
+	    			printf("%c" + c + "");
+	    			break;
+	    		}
 #endif
 }
 
