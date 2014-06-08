@@ -25,11 +25,13 @@
 # include <time.h>
 # include <math.h>
 # include <unistd.h>
+#define clear(x) printf("\033[2J");
 
 #elif defined(_WIN32) || defined(WIN32)
 # include <windows.h>
 # include <stdio.h>
 #include <stdlib.h>
+#define clear(x) system("cls");
 #define sleep(x) Sleep(1000* x)
 #endif
 
@@ -143,11 +145,14 @@ int wait(){
 }
 
 int clearScreen(){
-	int i =printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-	if(i > 0){
-		return 1;
-	}else
-		return -1;
+////	int i =printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+//
+//	if(i > 0){
+//		return 1;
+//	}else
+//		return -1;
+	clear();
+	return 1;
 }
 void rollEffect(char str[],int length, int iters){ // works on occasion
 	int i;
@@ -323,16 +328,14 @@ void movePlayer(int newX, int newY){// returns -1 if couldnt move to pos, 0 if m
 	}
 }
 int initialize(){
-//	printf("How big is the hood?");
-//		int input = -1;
+	printf("How big is the hood?");
+		int input = -1;
 //		char uin;
-//		while(input < 0){
-//			printf("[1 Small][2 Medium][3 Large][4 DAMN!]");
-//			scanf("%i",&input);
-////		}
-//		printf(" You chose %u\n", input);
-		genWorld(12, &myWorld);
-//		drawFrame();
+		printf("[1 Small][2 Medium][3 Large][4 DAMN!]");
+		scanf("%i",&input);
+		printf(" You chose %u\n", input);
+		genWorld(input, &myWorld);
+		drawFrame();
 //		int i = 0;// iterator
 		int r = -2; // return check
 //		while(r < 0){
