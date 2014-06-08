@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-// hypebasedtraplordpreveeny
+
 
 
 #ifdef __unix__
@@ -29,6 +29,7 @@
 #elif defined(_WIN32) || defined(WIN32)
 # include <windows.h>
 # include <stdio.h>
+#include <stdlib.h>
 #define sleep(x) Sleep(1000* x)
 #endif
 
@@ -37,17 +38,18 @@ int turns = 1;
 enum buildings{house = 1, buisness = 2, store = 3, tree = 4};
 // enum sizes{small = 3,medium = 4,large = 8,DAMN = 16};
 enum moveDirections{down = 1, up = 2, left = 3, right = 4};
-char map[10][10] = {{'|','H','X','X','X','H','X','|','X','X'},
-					{'|','H','H','|','H','H','X','|','H','X'},
-					{'|','H','H','|','H','H','X','|','B','X'},
-					{'|','H','H','|','X','H','X','|','H','B'},
-					{'|','-','-','-','-','-','-','+','-','-'},
-					{'|','X','H','|','H','X','X','|','B','S'},
-					{'|','B','H','-','+','H','H','|','B','S'},
-					{'|','B','X','H','|','X','H','|','-','-'},
-					{'|','S','X','H','-','|','H','|','H','H'},
-					{'|','B','X','X','H','B','H','|','H','X'},
-};
+//char map[10][10] = {{'|','H','X','X','X','H','X','|','X','X'},
+//					{'|','H','H','|','H','H','X','|','H','X'},
+//					{'|','H','H','|','H','H','X','|','B','X'},
+//					{'|','H','H','|','X','H','X','|','H','B'},
+//					{'|','-','-','-','-','-','-','+','-','-'},
+//					{'|','X','H','|','H','X','X','|','B','S'},
+//					{'|','B','H','-','+','H','H','|','B','S'},
+//					{'|','B','X','H','|','X','H','|','-','-'},
+//					{'|','S','X','H','-','|','H','|','H','H'},
+//					{'|','B','X','X','H','B','H','|','H','X'},
+//};
+char **map;
 
 
 typedef struct{
@@ -65,64 +67,65 @@ typedef struct {
 	char playerTile;
 //	char carTile;
 }World;
+
 Player player = {0,0,100,100,0,0};
-World myWorld = {10,3,'|'};
-//
-//void genWorld(int size,World* myWorld){
+World myWorld = {10,3,'o'};
+
+void genWorld(int size,World* myWorld){
 //
 //	//allocate (size) spaces for 2d array (map), of chars (Day 1)
 //	printf("Mallocing");
-//	map = malloc(sizeof(char*) * size);
-//	int i;
-//	for(i = 0; i < size; i++)
-//		map[i]= (char*) malloc(size * sizeof(char));
-//
-//	//Gen Roads
-//	for(i = 0;i < size-1; i++){
-//		int j;
-//		for(j = 0; j < size-1; j++){
-//			if(((i + 1) % myWorld->streetspacing == 0) && ((j + 1) % myWorld->streetspacing == 0)){
-//				map[i][j] = '+';//intersections
-//			}
-//			else if(((j + 1) % myWorld->streetspacing == 0)){
-//				map[i][j] = '-';// y = n roads
-//			}
-//			else if((i + 1) % myWorld->streetspacing == 0){
-//				map[i][j] = '|';// x = n roads
-//			}else//Trees as place holders between roads
-//				map[i][j] = 'x';
-//		}
-//	myWorld->size = size;
-//	}
-//	//Gen Buildings
-//	srand(time(NULL)); //seed the earth
-//	for(i = 0; i < size- 1; i++){
-//		int j;
-//		for(j = 0; j < size -1; j++){
-//			if(map[i][j] == 'x'){
-//				int randy =  rand()%(4) + 1;
-//				switch(randy){
-//				case house:
-//					map[i][j] = 'H';
-//					break;
-//				case buisness:
-//					map[i][j] = 'B';
-//					break;
-//				case store:
-//					map[i][j] = 'S';
-//					break;
-//				case tree:
-//					map[i][j] = 'X';
-//					break;
-//				default:
-//					puts("Dun goofed, placing a tree");
-//					map[i][j] = 'X';
-//					break;
-//				}
-//			}
-//		}
-//	}
-//}
+	map = malloc (sizeof(char*) * size);
+	int i;
+	for(i = 0; i < size; i++){
+		map[i]= malloc(sizeof(char*) * size);
+	}
+	//Gen Roads
+	for(i = 0;i < size; i++){
+		int j;
+		for(j = 0; j < size; j++){
+			if(((i + 1) % myWorld->streetspacing == 0) && ((j + 1) % myWorld->streetspacing == 0)){
+				map[i][j] = '+';//intersections
+			}
+			else if(((j + 1) % myWorld->streetspacing == 0)){
+				map[i][j] = '|';// y = n roads
+			}
+			else if((i + 1) % myWorld->streetspacing == 0){
+				map[i][j] = '-';// x = n roads
+			}else//Trees as place holders between roads
+				map[i][j] = 'x';
+		}
+	myWorld->size = size;
+	}
+	//Gen Buildings
+	srand(time(NULL)); //seed the earth
+	for(i = 0; i < size- 1; i++){
+		int j;
+		for(j = 0; j < size -1; j++){
+			if(map[i][j] == 'x'){
+				int randy =  rand()%(4) + 1;
+				switch(randy){
+				case house:
+					map[i][j] = 'H';
+					break;
+				case buisness:
+					map[i][j] = 'B';
+					break;
+				case store:
+					map[i][j] = 'S';
+					break;
+				case tree:
+					map[i][j] = 'X';
+					break;
+				default:
+					puts("Dun goofed, placing a tree");
+					map[i][j] = 'X';
+					break;
+				}
+			}
+		}
+	}
+}
 //void genWorld(){
 //	myWorld.map = {
 //			{'X','X','|','X','X'}
@@ -153,21 +156,23 @@ void rollEffect(char str[],int length, int iters){ // works on occasion
 	for(j = 1; j <= iters; j ++){
 		for(i = 0; i < length; i++){
 			printf(" %c", str[i]);
-			sleep(.25);
+//			sleep(.25);
 		}
 	}
 	printf("\n");
 }
 void printHelp(){
+	clearScreen();
 	printf("\nHELP_________\n");
 	printf("Movement: W A S D\n");
 	printf("OBJECTIVE: roam the neighbor hood, there are many \'features\' \n'");
 	wait();
 }
 void splash(){
-	rollEffect("Welcome to the Neighborhood",27,1);
+//	printf(name);
+	rollEffect("Welcome to the Neighborhood",0,1);
 	printf("\t     Written by Lucien Brulé\n");
-	rollEffect("'`~,-`^",7,4);
+	rollEffect("'`~,-`^",0,1);
 	printf("Type [h] for HELP and COMMANDS,or [Enter] to continue");
 	if(getchar() == 'h'){
 		printHelp();
@@ -210,7 +215,6 @@ int spawnPlayer(){
 	}
 
 	else{
-
 		putPlayer(0,1);
 		return 0;
 	}
@@ -327,7 +331,7 @@ int initialize(){
 //			scanf("%i",&input);
 ////		}
 //		printf(" You chose %u\n", input);
-//		genWorld(input, &myWorld);
+		genWorld(12, &myWorld);
 //		drawFrame();
 //		int i = 0;// iterator
 		int r = -2; // return check
